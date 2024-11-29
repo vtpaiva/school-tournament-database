@@ -170,7 +170,7 @@ VALUES
 (3, '12345678903', 3, 'TEMPO', 'P'),
 (4, '12345678904', 4, 'PONTOS', 'P');
 
--- Participações em competições
+-- ParticipaçõE.ID_EQUIPE = P.ID_EQUIPE AND E.ESTUDANTE = P.ESTUDANTEes em competições
 INSERT INTO Participa (ID_COMPETICAO, ID_EQUIPE, COLOCACAO, PONTUACAO)
 VALUES 
 (1, 1, 1, 10),
