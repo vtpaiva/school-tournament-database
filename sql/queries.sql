@@ -1,3 +1,20 @@
+-- Selecionar escolas com equipes em todas os esportes possíveis.
+
+SELECT 
+    ES.CODIGO_INEP_MEC
+FROM 
+    ESCOLA ES
+JOIN 
+    EQUIPE E ON ES.ANO = E.ANO AND ES.CODIGO_INEP_MEC = E.CODIGO_INEP_MEC
+JOIN 
+    MODALIDADE M ON E.ID_MODALIDADE = M.ID
+GROUP BY 
+    ES.CODIGO_INEP_MEC
+HAVING 
+    COUNT(DISTINCT M.ESPORTE) = (SELECT COUNT(M1.ESPORTE) FROM MODALIDADE M1);
+
+----
+
 -- Gere uma lista com cada modalidade esportiva, o número total de participações 
 -- e a pontuação média das equipes que participaram.
 
@@ -15,6 +32,36 @@ GROUP BY
     M.ESPORTE
 ORDER BY 
     TotalParticipacoes DESC;
+
+----
+
+-- Contagem de jogos de uma equipe em um período agrupada por resultado.
+
+WITH PossiveisResultados AS (
+    SELECT 'V' AS RESULTADO
+    UNION ALL
+    SELECT 'D'
+    UNION ALL
+    SELECT 'E'
+    UNION ALL
+    SELECT 'P'
+)
+
+SELECT
+    P.RESULTADO,
+    COUNT(E.ID)
+FROM
+    PossiveisResultados P
+LEFT JOIN
+    DISPUTA D ON P.RESULTADO = D.RESULTADO::text
+LEFT JOIN
+    EQUIPE E ON D.ID_EQUIPE = E.ID AND E.NOME = 'ABAPORU'
+JOIN
+    JOGO J ON J.ID = D.ID_JOGO AND J.DATA_JOGO BETWEEN '2024-01-01' AND '2024-12-31'
+GROUP BY
+    P.RESULTADO
+ORDER BY
+    P.RESULTADO DESC;
 
 ----
 
@@ -62,34 +109,6 @@ WHERE
 ORDER BY 
     EC.CRITERIO,
     EC.REGRA;
-    
--- Contagem de jogos de uma equipe em um período agrupada por resultado.
-
-WITH PossiveisResultados AS (
-    SELECT 'V' AS RESULTADO
-    UNION ALL
-    SELECT 'D'
-    UNION ALL
-    SELECT 'E'
-    UNION ALL
-    SELECT 'P'
-)
-
-SELECT
-    P.RESULTADO,
-    COUNT(E.ID)
-FROM
-    PossiveisResultados P
-LEFT JOIN
-    DISPUTA D ON P.RESULTADO = D.RESULTADO::text
-LEFT JOIN
-    EQUIPE E ON D.ID_EQUIPE = E.ID AND E.NOME = 'ABAPORU'
-JOIN
-    JOGO J ON J.ID = D.ID_JOGO AND J.DATA_JOGO BETWEEN '2024-01-01' AND '2024-12-31'
-GROUP BY
-    P.RESULTADO
-ORDER BY
-    P.RESULTADO DESC;
 
 ----
 
