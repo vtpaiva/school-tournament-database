@@ -36,22 +36,22 @@ class Modalidade:
     @classmethod
     def get_from_input(cls):
 
-        sport = input('Sport?')
-        sex = input('Sex?')
-        min_age = int(input('Minimum age?'))
-        max_age = int(input('Maximum age?'))
-        height = float(input('Height?'))
-        weight = float(input('Weight?'))
+        sport = input('Sport? ')
+        sex = input('Sex? ')
+        min_age = int(input('Minimum age? '))
+        max_age = int(input('Maximum age? '))
+        height = float(input('Height? '))
+        weight = float(input('Weight? '))
 
         if height <= 0 or weight <= 0:
             raise ValueError("Altura ou peso não podem ser menores que zero.")
         
         height = continuos_to_discrete(field=0, value=height)
         weight = continuos_to_discrete(field=1, value=weight)
-        disability_type = input('Disability type?')
-        n_start = int(input('Stating team players?'))
-        n_reserve = int(input('Reserve team players?'))
-        scor_rule = input('Scoring rule?')
+        disability_type = input('Disability type? ')
+        n_start = int(input('Stating team players? '))
+        n_reserve = int(input('Reserve team players? '))
+        scor_rule = input('Scoring rule? ')
 
         return cls(
                     sport, 

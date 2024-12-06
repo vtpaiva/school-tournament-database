@@ -38,26 +38,26 @@ ORDER BY
 -- Contagem de jogos de uma equipe em um período agrupada por resultado.
 
 WITH PossiveisResultados AS (
-    SELECT 'V' AS RESULTADO
+    SELECT 'V'::RESULTADO_JOGO AS RESULTADO
     UNION ALL
-    SELECT 'D'
+    SELECT 'D'::RESULTADO_JOGO
     UNION ALL
-    SELECT 'E'
+    SELECT 'E'::RESULTADO_JOGO
     UNION ALL
-    SELECT 'P'
+    SELECT 'P'::RESULTADO_JOGO
 )
 
 SELECT
     P.RESULTADO,
     COUNT(E.ID)
 FROM
-    PossiveisResultados P
-LEFT JOIN
-    DISPUTA D ON P.RESULTADO = D.RESULTADO::text
-LEFT JOIN
-    EQUIPE E ON D.ID_EQUIPE = E.ID AND E.NOME = 'ABAPORU'
+    DISPUTA D
 JOIN
-    JOGO J ON J.ID = D.ID_JOGO AND J.DATA_JOGO BETWEEN '2024-01-01' AND '2024-12-31'
+    EQUIPE E ON D.ID_EQUIPE = E.ID AND E.ID = 2
+JOIN
+    JOGO J ON J.ID = D.ID_JOGO AND EXTRACT(YEAR FROM J.DATA_JOGO) = 2024
+RIGHT JOIN
+    PossiveisResultados P ON P.RESULTADO = D.RESULTADO
 GROUP BY
     P.RESULTADO
 ORDER BY
@@ -65,7 +65,7 @@ ORDER BY
 
 ----
 
--- Seleciona o estudante com melhores estatísticas em um ano ao longo
+-- Seleciona o estudante com melhores estatísticas ao longo
 -- do tempo para cada critério.
 
 WITH ESTATISTICAS_ALUNOS AS (
