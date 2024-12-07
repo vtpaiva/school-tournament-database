@@ -94,6 +94,7 @@ def valida_cpf(cpf: str) -> bool:
     Retorno:
         bool: True se o CPF for válido, False caso contrário.
     """
+
     return cpf.isdigit() and len(cpf) == 11
 
 
@@ -108,6 +109,7 @@ def valida_altura(altura: float) -> bool:
     Retorno:
         bool: True se a altura for válida, False caso contrário.
     """
+
     try:
         altura = float(altura)
         return 1.0 <= altura <= 3.0 
@@ -126,6 +128,7 @@ def valida_peso(peso: float) -> bool:
     Retorno:
         bool: True se o peso for válido, False caso contrário.
     """
+    
     try:
         peso = float(peso)
         return 30 <= peso <= 200  
