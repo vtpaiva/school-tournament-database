@@ -3,7 +3,7 @@ from ..tabelas.estudante import Estudante
 
 
 # Função que insere um registro de estudante na tabela 'Estudante' e 'Funcoes'
-def inserir_tupla(estudante, cursor):
+def inserir_tupla(estudante: Estudante, cursor: object) -> None:
     """
     Insere uma tupla de estudante no banco de dados.
 
@@ -11,7 +11,9 @@ def inserir_tupla(estudante, cursor):
         estudante (Estudante): Objeto da classe Estudante com os dados do estudante.
         cursor (object): Cursor para executar as consultas SQL no banco de dados.
     """
-    inserir_funcao(cursor, estudante.cpf)
+    
+    # Insere o CPF do estudante na tabela genérica de funções
+    inserir_funcao(estudante.cpf, cursor)
 
     cursor.execute("""
         INSERT INTO Estudante (CPF, NOME, ALTURA, PESO, SEXO, IDADE, TIPO_DEFICIENCIA)
@@ -28,7 +30,7 @@ def inserir_tupla(estudante, cursor):
 
 
 # Função que insere uma função associada ao CPF na tabela 'Funcoes'
-def inserir_funcao(cursor, cpf):
+def inserir_funcao(cpf: str, cursor: object) -> None:
     """
     Insere uma entrada de função na tabela 'Funcoes'.
 
@@ -36,6 +38,7 @@ def inserir_funcao(cursor, cpf):
         cursor (object): Cursor para executar as consultas SQL no banco de dados.
         cpf (str): CPF do estudante para o qual a função será associada.
     """
+
     cursor.execute("""
         INSERT INTO Funcoes (CPF, FUNCAO)
         VALUES (%(cpf)s, 'E')
@@ -43,7 +46,7 @@ def inserir_funcao(cursor, cpf):
 
 
 # Função principal que gerencia a inserção de um novo estudante no banco de dados
-def inserir_estudante():
+def inserir_estudante() -> None:
     """
     Gerencia o processo de entrada de dados, criação de um novo estudante e inserção no banco.
 
@@ -54,6 +57,7 @@ def inserir_estudante():
     4. Exibe uma mensagem de sucesso ou erro.
     5. Fecha a conexão com o banco, independentemente de sucesso ou erro.
     """
+
     try:
         conn, cursor = conectar_banco()
 
@@ -64,11 +68,11 @@ def inserir_estudante():
         cursor.close()
         conn.commit()
 
-        print(f"Estudante {nova_tupla.nome} cadastrado com sucesso!")
+        print(f"\nEstudante {nova_tupla.nome} cadastrado com sucesso!")
 
     except Exception as e:
         conn.rollback()
-        print(f"Erro ao inserir estudante: {e}")
+        print(f"\nErro ao inserir estudante: {e}")
 
     finally:
         conn.close()

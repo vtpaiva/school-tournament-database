@@ -4,6 +4,7 @@ from . import *
 # Classe que representa uma modalidade esportiva
 @dataclass
 class Modalidade:
+    
     esporte: str 
     sexo: str 
     idade_min: int  
@@ -18,7 +19,7 @@ class Modalidade:
     # Método de classe que cria uma instância de Modalidade com base na
     # entrada do usuário
     @classmethod
-    def get_from_input(cls):
+    def get_from_input(cls) -> object:
         esporte = input('Esporte: ')
         sexo = input('Sexo (M/F): ')
         idade_min = int(input('Idade mínima: '))

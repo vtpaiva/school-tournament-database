@@ -5,7 +5,7 @@ from ..tabelas.modalidade import Modalidade
 
 
 # Função que insere uma modalidade específica na tabela 'modalidade_desportiva' ou 'modalidade_paradesportiva'
-def inserir_modalidade_generico(modalidade, id, cursor):
+def inserir_modalidade_generico(modalidade: Modalidade, id: int, cursor: object) -> None:
     """
     Insere uma entrada genérica em uma das tabelas de modalidade ('modalidade_desportiva' ou 'modalidade_paradesportiva').
 
@@ -14,6 +14,7 @@ def inserir_modalidade_generico(modalidade, id, cursor):
         id (tuple): ID da modalidade gerado pelo banco de dados.
         cursor (object): Cursor para executar as consultas SQL no banco de dados.
     """
+
     nome_tabela = 'modalidade_desportiva' if modalidade.deficiencia == "NENHUMA" else 'modalidade_paradesportiva'
 
     cursor.execute(
@@ -23,7 +24,7 @@ def inserir_modalidade_generico(modalidade, id, cursor):
 
 
 # Função que insere uma nova tupla de modalidade na tabela 'Modalidade' e depois associa a uma tabela de modalidade específica
-def inserir_tupla(modalidade, cursor):
+def inserir_tupla(modalidade: Modalidade, cursor: object) -> None:
     """
     Insere uma nova tupla de modalidade na tabela 'Modalidade' e associa a uma das tabelas 'modalidade_desportiva' ou 'modalidade_paradesportiva'.
 
@@ -34,6 +35,7 @@ def inserir_tupla(modalidade, cursor):
     Exceções:
         ValueError: Levantada se a consulta INSERT não retornar o ID da modalidade.
     """
+
     cursor.execute("""
         INSERT INTO Modalidade
             (ESPORTE, SEXO, IDADE_MINIMA, IDADE_MAXIMA, ALTURA, PESO, TIPO_DEFICIENCIA, TITULARES, RESERVAS, REGRA_PONTUACAO)
@@ -66,7 +68,7 @@ def inserir_tupla(modalidade, cursor):
 
 
 # Função principal que gerencia a inserção de uma nova modalidade no banco de dados
-def inserir_modalidade():
+def inserir_modalidade() -> None:
     """
     Gerencia o processo de entrada de dados, criação de uma nova modalidade e inserção no banco de dados.
 
@@ -77,6 +79,7 @@ def inserir_modalidade():
     4. Exibe uma mensagem de sucesso ou erro.
     5. Fecha a conexão com o banco, independentemente de sucesso ou erro.
     """
+
     try:
         conn, cursor = conectar_banco()
 
@@ -86,11 +89,11 @@ def inserir_modalidade():
 
         conn.commit()
 
-        print(f"Modalidade de {nova_tupla.sport} cadastrada com sucesso!")
+        print(f"\nModalidade de {nova_tupla.esporte} cadastrada com sucesso!")
 
     except Exception as e:
         conn.rollback()
-        print(f"Erro ao inserir modalidade: {e}")
+        print(f"\nErro ao inserir modalidade: {e}")
 
     finally:
         cursor.close()

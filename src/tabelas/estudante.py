@@ -5,6 +5,7 @@ from ..comum.utils import *
 # Classe que representa um estudante no banco
 @dataclass
 class Estudante:
+    
     cpf: str  
     nome: str  
     idade: int  
@@ -16,7 +17,7 @@ class Estudante:
     # Método de classe que cria uma instância de Estudante a partir de
     # entradas do usuário
     @classmethod
-    def get_from_input(cls):
+    def get_from_input(cls) -> object:
         cpf = input("Digite o CPF do estudante (apenas números): ")
         if not valida_cpf(cpf):
             raise ValueError("CPF inválido. Deve ter 11 dígitos numéricos.")

@@ -2,7 +2,7 @@ from . import *
 
 
 # Função que verifica se não houve jogos no período consultado
-def sem_jogos_no_periodo(resultados):
+def sem_jogos_no_periodo(resultados: list) -> bool:
     """
     Verifica se não houve jogos no período consultado.
 
@@ -16,7 +16,7 @@ def sem_jogos_no_periodo(resultados):
 
 
 # Função que executa a consulta de jogos de uma equipe em um determinado ano
-def selecionar_jogos(cursor):
+def selecionar_jogos(cursor: object) -> None:
     """
     Executa a consulta de jogos de uma equipe em um determinado ano.
 
@@ -73,7 +73,7 @@ def selecionar_jogos(cursor):
 
 
 # Função que realiza a consulta de jogos de uma equipe e exibe os resultados
-def consultar_jogos():
+def consultar_jogos() -> None:
     """
     Conecta ao banco de dados, consulta os jogos de uma equipe em um ano específico e exibe os resultados.
 

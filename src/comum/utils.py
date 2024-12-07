@@ -10,7 +10,7 @@ ALTURA, PESO = 0, 1
 
 
 # Função para conectar ao banco de dados utilizando variáveis de ambiente
-def conectar_banco():
+def conectar_banco() -> tuple:
     """
     Estabelece a conexão com o banco de dados utilizando variáveis de ambiente.
 
@@ -42,7 +42,7 @@ def conectar_banco():
 
 # Função que converte valores contínuos (altura ou peso) em categorias
 # discretas
-def continuo_para_discreto(campo, valor=None):
+def continuo_para_discreto(campo: int, valor: float =None) -> str:
     """
     Converte valores contínuos (altura ou peso) em categorias discretas.
 
@@ -84,7 +84,7 @@ def continuo_para_discreto(campo, valor=None):
 
 
 # Função para validar se o CPF é válido
-def valida_cpf(cpf):
+def valida_cpf(cpf: str) -> bool:
     """
     Verifica se o CPF contém apenas números e se possui exatamente 11 dígitos.
 
@@ -98,7 +98,7 @@ def valida_cpf(cpf):
 
 
 # Função para validar se a altura está no intervalo permitido (1m a 3m)
-def valida_altura(altura):
+def valida_altura(altura: float) -> bool:
     """
     Valida se a altura está dentro do intervalo permitido (1.0 a 3.0 metros).
 
@@ -116,7 +116,7 @@ def valida_altura(altura):
 
 
 # Função para validar se o peso está no intervalo permitido (30kg a 200kg)
-def valida_peso(peso):
+def valida_peso(peso: float) -> bool:
     """
     Valida se o peso está dentro do intervalo permitido (30kg a 200kg).
 
