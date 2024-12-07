@@ -1,5 +1,6 @@
 from . import *
 from ..tables.estudante import Estudante
+from ..common.utils import valida_cpf
 
 def inserir_estudante(conn, cursor, student):
     inserir_funcao(cursor, student.cpf, 'E')
@@ -34,6 +35,9 @@ def insert_estudante():
             'sexo': 'F',
             'deficiencia': 'VISUAL'
         }
+
+        if not valida_cpf(dic['cpf']):
+            raise ValueError("CPF inválido. Deve ter 11 dígitos numéricos.")
 
         new_tuple = Estudante.get_from_input(dic)
 
