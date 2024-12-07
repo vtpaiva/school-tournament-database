@@ -1,1 +1,0 @@
-from psycopg import connect

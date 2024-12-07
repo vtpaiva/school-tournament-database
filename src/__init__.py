@@ -1,1 +1,1 @@
-from .common.utils import conectar_banco
+from .comum.utils import conectar_banco

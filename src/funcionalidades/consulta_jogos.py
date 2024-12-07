@@ -1,16 +1,18 @@
 from . import *
 
-def has_no_games_played(resultados):
-    return all(row[1] == 0 for row in resultados)
 
-def query(cursor):
-    team_id = input("Team? ")
-    if int(team_id) < 1:
-        raise ValueError("ID deve ser maior que um")
+def sem_jogos_no_periodo(resultados):
+    return all(tupla[1] == 0 for tupla in resultados)
 
-    year = input("Year? ")           
-    if int(year) < 0:
-        raise ValueError("Ano deve ser maior que zero") 
+
+def selecionar_jogos(cursor):
+    time_id = input("Digite o ID do time a ser consultado: ")
+    if int(time_id) < 1:
+        raise ValueError("O ID da equipe deve ser maior que zero.")
+
+    ano_consulta = input("Digite o ano de jogos a ser consultado: ")
+    if int(ano_consulta) < 1:
+        raise ValueError("O ano deve ser maior que zero.")
 
     cursor.execute("""
         SELECT
@@ -37,7 +39,7 @@ def query(cursor):
                 JOGO J ON J.ID = D.ID_JOGO
             WHERE
                 E.ID = %(id)s
-                AND EXTRACT(YEAR FROM J.DATA_JOGO) = %(year)s
+                AND EXTRACT(YEAR FROM J.DATA_JOGO) = %(ano)s
         ) AS Subquery
         ON P.RESULTADO = Subquery.RESULTADO
         GROUP BY
@@ -45,31 +47,32 @@ def query(cursor):
         ORDER BY
             P.RESULTADO DESC;
         """, {
-            'id': team_id,
-            'year': year,
-        })
+        'id': time_id,
+        'ano': ano_consulta,
+    })
 
-def query_jogos():
+
+def consultar_jogos():
     try:
         conn, cursor = conectar_banco()
 
-        query(cursor=cursor)
-        
+        selecionar_jogos(cursor=cursor)
+
         resultados = cursor.fetchall()
 
         cursor.close()
         conn.commit()
 
-        for row in resultados:
-            print(row)
+        for tupla in resultados:
+            print(tupla)
 
-        if has_no_games_played(resultados=resultados):
-            print('\nWARNING: A equipe não existe ou não jogou nenhum jogo no ano consultado.')
+        if sem_jogos_no_periodo(resultados=resultados):
+            print(
+                '\nWARNING: A equipe não existe ou não jogou nenhum jogo no ano consultado.')
 
-    except Exception as error:
+    except Exception as e:
         conn.rollback()
-
-        print('Query error: ', error)
+        print(f"Erro ao consultar jogos: {e}")
 
     finally:
         conn.close()

@@ -1,6 +1,6 @@
-from .functionalities.insert_estudante import insert_estudante
-from .functionalities.insert_modalidade import insert_modalidade
-from .functionalities.query import query_jogos
+from .funcionalidades.consulta_jogos import consultar_jogos
+from .funcionalidades.inserir_estudante import inserir_estudante
+from .funcionalidades.inserir_modalidade import inserir_modalidade
 
 if __name__ == "__main__":
     while True:
@@ -12,13 +12,13 @@ if __name__ == "__main__":
 
         opcao = input("Escolha uma opção (1/2/3/4): ")
         print('')
-        
+
         if opcao == '1':
-            insert_estudante()
+            inserir_estudante()
         elif opcao == '2':
-            insert_modalidade()
+            inserir_modalidade()
         elif opcao == '3':
-            query_jogos()
+            consultar_jogos()
         elif opcao == '4':
             break
         else:
