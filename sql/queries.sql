@@ -15,8 +15,8 @@ HAVING
 
 ----
 
--- Gere uma lista com cada modalidade esportiva, o número total de participações 
--- e a pontuação média das equipes que participaram.
+-- Gere uma lista com cada esporte, o número total de participações 
+-- de equipes em cada esporte e a pontuação média das equipes que participaram.
 
 SELECT 
     M.ESPORTE AS Modalidade,
@@ -35,7 +35,7 @@ ORDER BY
 
 ----
 
--- Contagem de jogos de uma equipe em um período agrupada por resultado
+-- Contagem de jogos de uma equipe em um ano agrupada por resultado
 -- independentemente de haver jogos com dado resultado, retornando 0 caso inexista.
 
 SELECT
@@ -75,32 +75,25 @@ ORDER BY
 -- Seleciona o estudante com melhores estatísticas que participaram
 -- de algum prêmio individual ao longo do tempo para cada critério.
 
-SELECT DISTINCT ON (EC.CRITERIO)
-    EC.ESTUDANTE,
-    EC.CRITERIO,
-    EC.REGRA,
-    EC.VALOR AS VALOR_RESULTADO
-FROM (
-    SELECT
-        E.ESTUDANTE AS ESTUDANTE, 
-        E.CRITERIO AS CRITERIO, 
-        PI.REGRA_COLOCACAO AS REGRA, 
-        E.VALOR AS VALOR
-    FROM 
-        Estatisticas E
-    JOIN
-        Participacao P ON E.ID_EQUIPE = P.ID_EQUIPE AND E.ESTUDANTE = P.ESTUDANTE
-    LEFT JOIN
-        Concorre C ON E.ID_EQUIPE = C.ID_EQUIPE AND E.ESTUDANTE = C.ESTUDANTE
-    JOIN
-        Premio_individual PI ON C.ID_COMPETICAO = PI.ID_COMPETICAO AND C.CRITERIO = PI.CRITERIO
-) AS EC
+SELECT DISTINCT ON (E.CRITERIO)
+    E.ESTUDANTE AS ESTUDANTE, 
+    E.CRITERIO AS CRITERIO, 
+    PI.REGRA_COLOCACAO AS REGRA, 
+    E.VALOR AS VALOR
+FROM 
+    Estatisticas E
+JOIN
+    Participacao P ON E.ID_EQUIPE = P.ID_EQUIPE AND E.ESTUDANTE = P.ESTUDANTE
+LEFT JOIN
+    Concorre C ON E.ID_EQUIPE = C.ID_EQUIPE AND E.ESTUDANTE = C.ESTUDANTE
+JOIN
+    Premio_individual PI ON C.ID_COMPETICAO = PI.ID_COMPETICAO AND C.CRITERIO = PI.CRITERIO
 ORDER BY 
-    EC.CRITERIO,
-    CASE 
-        WHEN EC.REGRA = '+' THEN EC.VALOR
-        WHEN EC.REGRA = '-' THEN -EC.VALOR
-    END DESC;
+E.CRITERIO,
+CASE 
+    WHEN PI.REGRA_COLOCACAO = '+' THEN E.VALOR
+    WHEN PI.REGRA_COLOCACAO = '-' THEN -E.VALOR
+END DESC;
 
 ----
 
@@ -108,52 +101,39 @@ ORDER BY
 -- longo dos anos retornando as chaves primária e secundária da modalidade 
 -- e o código INEP da escola.
 
-SELECT DISTINCT ON (T.MODALIDADE_ID)
-    T.MODALIDADE_ID,
-    T.ESPORTE,
-    T.SEXO, 
-    T.IDADE_MINIMA,
-    T.IDADE_MAXIMA,
-    T.ALTURA,
-    T.PESO,
-    T.DEFICIENCIA,
-    T.ESCOLA,
-    T.CONTADOR
-FROM (
-    SELECT 
-        M.ID AS MODALIDADE_ID,
-        M.ESPORTE AS ESPORTE,
-        M.SEXO AS SEXO, 
-        M.IDADE_MINIMA AS IDADE_MINIMA,
-        M.IDADE_MAXIMA AS IDADE_MAXIMA,
-        M.ALTURA AS ALTURA,
-        M.PESO AS PESO,
-        M.TIPO_DEFICIENCIA AS DEFICIENCIA,
-        ES.CODIGO_INEP_MEC AS ESCOLA,
-        COUNT(C.ID) AS contador
-    FROM
-        PARTICIPA P
-    JOIN
-        COMPETICAO C ON P.ID_COMPETICAO = C.ID AND P.COLOCACAO = 1
-    JOIN
-        EQUIPE E ON P.ID_EQUIPE = E.ID
-    JOIN
-        ESCOLA ES ON E.ANO = ES.ANO AND E.CODIGO_INEP_MEC = ES.CODIGO_INEP_MEC
-    JOIN
-        MODALIDADE M ON M.ID = C.ID_MODALIDADE
-    GROUP BY 
-        ES.CODIGO_INEP_MEC,
-        M.ID,
-        M.ESPORTE,
-        M.SEXO, 
-        M.IDADE_MINIMA,
-        M.IDADE_MAXIMA,
-        M.ALTURA,
-        M.PESO,
-        M.TIPO_DEFICIENCIA
-) AS T
+SELECT DISTINCT ON (M.ID)
+    M.ID AS MODALIDADE_ID,
+    M.ESPORTE AS ESPORTE,
+    M.SEXO AS SEXO, 
+    M.IDADE_MINIMA AS IDADE_MINIMA,
+    M.IDADE_MAXIMA AS IDADE_MAXIMA,
+    M.ALTURA AS ALTURA,
+    M.PESO AS PESO,
+    M.TIPO_DEFICIENCIA AS DEFICIENCIA,
+    ES.CODIGO_INEP_MEC AS ESCOLA,
+    COUNT(C.ID) AS contador
+FROM
+    PARTICIPA P
+JOIN
+    COMPETICAO C ON P.ID_COMPETICAO = C.ID AND P.COLOCACAO = 1
+JOIN
+    EQUIPE E ON P.ID_EQUIPE = E.ID
+JOIN
+    ESCOLA ES ON E.ANO = ES.ANO AND E.CODIGO_INEP_MEC = ES.CODIGO_INEP_MEC
+JOIN
+    MODALIDADE M ON M.ID = C.ID_MODALIDADE
+GROUP BY 
+    ES.CODIGO_INEP_MEC,
+    M.ID,
+    M.ESPORTE,
+    M.SEXO, 
+    M.IDADE_MINIMA,
+    M.IDADE_MAXIMA,
+    M.ALTURA,
+    M.PESO,
+    M.TIPO_DEFICIENCIA
 ORDER BY
-    T.MODALIDADE_ID,
-    T.CONTADOR DESC;
+    M.ID,
+    contador DESC;
 
 ----

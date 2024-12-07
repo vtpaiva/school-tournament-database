@@ -12,6 +12,7 @@ def sem_jogos_no_periodo(resultados: list) -> bool:
     Retorno:
         bool: True se o total de jogos for zero para todos os tipos de resultado, False caso contrário.
     """
+
     return all(tupla[1] == 0 for tupla in resultados)
 
 
@@ -26,6 +27,7 @@ def selecionar_jogos(cursor: object) -> None:
     Exceções:
         ValueError: Levantada se o ID do time ou o ano forem menores que 1.
     """
+
     time_id = input("Digite o ID do time a ser consultado: ")
     if int(time_id) < 1:
         raise ValueError("O ID da equipe deve ser maior que zero.")
@@ -83,6 +85,7 @@ def consultar_jogos() -> None:
     Exceções:
         Exception: Captura qualquer exceção gerada durante o processo de consulta.
     """
+    
     try:
         conn, cursor = conectar_banco()
 

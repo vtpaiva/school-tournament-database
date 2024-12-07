@@ -28,7 +28,7 @@ def conectar_banco() -> tuple:
     # ambiente
     conn_params = {
         'dbname': os.getenv("DBNAME"),
-        'user': os.getenv("USERNAME"),
+        'user': os.getenv("DB_USERNAME"),
         'host': os.getenv("HOST"),
         'password': os.getenv("PASSWORD"),
         'port': os.getenv("PORT")
