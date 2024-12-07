@@ -11,7 +11,7 @@ JOIN
 GROUP BY 
     ES.CODIGO_INEP_MEC
 HAVING 
-    COUNT(DISTINCT M.ESPORTE) = (SELECT COUNT(M1.ESPORTE) FROM MODALIDADE M1);
+    COUNT(DISTINCT M.ESPORTE) = (SELECT DISTINCT COUNT(M1.ESPORTE) FROM MODALIDADE M1);
 
 ----
 
@@ -35,9 +35,13 @@ ORDER BY
 
 ----
 
--- Contagem de jogos de uma equipe em um período agrupada por resultado.
+-- Contagem de jogos de uma equipe em um período agrupada por resultado
+-- independentemente de haver jogos com dado resultado, retornando 0 caso inexista.
 
-WITH PossiveisResultados AS (
+SELECT
+    P.RESULTADO,
+    COUNT(Subquery.ID) AS TOTAL
+FROM (
     SELECT 'V'::RESULTADO_JOGO AS RESULTADO
     UNION ALL
     SELECT 'D'::RESULTADO_JOGO
@@ -45,19 +49,22 @@ WITH PossiveisResultados AS (
     SELECT 'E'::RESULTADO_JOGO
     UNION ALL
     SELECT 'P'::RESULTADO_JOGO
-)
-
-SELECT
-    P.RESULTADO,
-    COUNT(E.ID)
-FROM
-    DISPUTA D
-JOIN
-    EQUIPE E ON D.ID_EQUIPE = E.ID AND E.ID = 2
-JOIN
-    JOGO J ON J.ID = D.ID_JOGO AND EXTRACT(YEAR FROM J.DATA_JOGO) = 2024
-RIGHT JOIN
-    PossiveisResultados P ON P.RESULTADO = D.RESULTADO
+) AS P
+LEFT JOIN (
+    SELECT
+        D.RESULTADO,
+        E.ID
+    FROM
+        DISPUTA D
+    JOIN
+        EQUIPE E ON D.ID_EQUIPE = E.ID
+    JOIN
+        JOGO J ON J.ID = D.ID_JOGO
+    WHERE
+        E.ID = 2
+        AND EXTRACT(YEAR FROM J.DATA_JOGO) = 2024
+) AS Subquery
+ON P.RESULTADO = Subquery.RESULTADO
 GROUP BY
     P.RESULTADO
 ORDER BY
@@ -65,10 +72,15 @@ ORDER BY
 
 ----
 
--- Seleciona o estudante com melhores estatísticas ao longo
--- do tempo para cada critério.
+-- Seleciona o estudante com melhores estatísticas que participaram
+-- de algum prêmio individual ao longo do tempo para cada critério.
 
-WITH ESTATISTICAS_ALUNOS AS (
+SELECT DISTINCT ON (EC.CRITERIO)
+    EC.ESTUDANTE,
+    EC.CRITERIO,
+    EC.REGRA,
+    EC.VALOR AS VALOR_RESULTADO
+FROM (
     SELECT
         E.ESTUDANTE AS ESTUDANTE, 
         E.CRITERIO AS CRITERIO, 
@@ -78,44 +90,36 @@ WITH ESTATISTICAS_ALUNOS AS (
         Estatisticas E
     JOIN
         Participacao P ON E.ID_EQUIPE = P.ID_EQUIPE AND E.ESTUDANTE = P.ESTUDANTE
-    JOIN
+    LEFT JOIN
         Concorre C ON E.ID_EQUIPE = C.ID_EQUIPE AND E.ESTUDANTE = C.ESTUDANTE
     JOIN
         Premio_individual PI ON C.ID_COMPETICAO = PI.ID_COMPETICAO AND C.CRITERIO = PI.CRITERIO
-)
-
-SELECT 
-    EC.CRITERIO,
-    EC.REGRA,
-    EC.ESTUDANTE,
-    EC.VALOR AS VALOR_RESULTADO
-FROM 
-    ESTATISTICAS_ALUNOS EC
-WHERE 
-    (EC.CRITERIO, EC.REGRA, EC.VALOR) IN (
-        SELECT 
-            CRITERIO, 
-            REGRA,
-            CASE 
-                WHEN REGRA = '+' THEN MAX(VALOR) 
-                WHEN REGRA = '-' THEN MIN(VALOR)
-            END AS VALOR_RESULTADO
-        FROM 
-            ESTATISTICAS_ALUNOS
-        GROUP BY 
-            CRITERIO, 
-            REGRA
-    )
+) AS EC
 ORDER BY 
     EC.CRITERIO,
-    EC.REGRA;
+    CASE 
+        WHEN EC.REGRA = '+' THEN EC.VALOR
+        WHEN EC.REGRA = '-' THEN -EC.VALOR
+    END DESC;
 
 ----
 
--- Seleciona as escolas com mais títulos de acordo com a modalidade
--- retornando a chave secundária da modalidade e o ID da escola.
+-- Seleciona as escolas com mais títulos em cada modalidade acumulados ao 
+-- longo dos anos retornando as chaves primária e secundária da modalidade 
+-- e o código INEP da escola.
 
-WITH EscolaColocacoes AS (
+SELECT DISTINCT ON (T.MODALIDADE_ID)
+    T.MODALIDADE_ID,
+    T.ESPORTE,
+    T.SEXO, 
+    T.IDADE_MINIMA,
+    T.IDADE_MAXIMA,
+    T.ALTURA,
+    T.PESO,
+    T.DEFICIENCIA,
+    T.ESCOLA,
+    T.CONTADOR
+FROM (
     SELECT 
         M.ID AS MODALIDADE_ID,
         M.ESPORTE AS ESPORTE,
@@ -147,33 +151,9 @@ WITH EscolaColocacoes AS (
         M.ALTURA,
         M.PESO,
         M.TIPO_DEFICIENCIA
-)
-
-SELECT 
-    EC.ESPORTE,
-    EC.SEXO, 
-    EC.IDADE_MINIMA,
-    EC.IDADE_MAXIMA,
-    EC.ALTURA,
-    EC.PESO,
-    EC.DEFICIENCIA,
-    EC.ESCOLA,
-    EC.CONTADOR AS MAX_CONTADOR
-FROM 
-    ESCOLACOLOCACOES EC
-JOIN (
-    SELECT 
-        MODALIDADE_ID,
-        MAX(CONTADOR) AS MAX_CONTADOR
-    FROM 
-        ESCOLACOLOCACOES
-    GROUP BY 
-        MODALIDADE_ID
-) 
-AS 
-    MAX_CONTADOR_TBL ON EC.MODALIDADE_ID = MAX_CONTADOR_TBL.MODALIDADE_ID 
-    AND EC.CONTADOR = MAX_CONTADOR_TBL.MAX_CONTADOR
+) AS T
 ORDER BY
-    EC.ESPORTE;
+    T.MODALIDADE_ID,
+    T.CONTADOR DESC;
 
 ----

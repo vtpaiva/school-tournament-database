@@ -165,6 +165,7 @@ VALUES
 -- Concorrência a prêmios individuais
 INSERT INTO Concorre (ID_EQUIPE, ESTUDANTE, ID_COMPETICAO, CRITERIO, RESULTADO)
 VALUES 
+(6, '12345678914', 3, 'TEMPO', 'P'),
 (1, '12345678901', 1, 'CESTAS', 'P'),
 (2, '12345678902', 2, 'GOLS', 'V'),
 (3, '12345678903', 3, 'TEMPO', 'P'),

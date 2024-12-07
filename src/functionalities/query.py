@@ -13,7 +13,10 @@ def query(cursor):
         raise ValueError("Ano deve ser maior que zero") 
 
     cursor.execute("""
-        WITH PossiveisResultados AS (
+        SELECT
+            P.RESULTADO,
+            COUNT(Subquery.ID) AS TOTAL
+        FROM (
             SELECT 'V'::RESULTADO_JOGO AS RESULTADO
             UNION ALL
             SELECT 'D'::RESULTADO_JOGO
@@ -21,19 +24,22 @@ def query(cursor):
             SELECT 'E'::RESULTADO_JOGO
             UNION ALL
             SELECT 'P'::RESULTADO_JOGO
-        )
-
-        SELECT
-            P.RESULTADO,
-            COUNT(E.ID)
-        FROM
-            DISPUTA D
-        JOIN
-            EQUIPE E ON D.ID_EQUIPE = E.ID AND E.ID = %(id)s
-        JOIN
-            JOGO J ON J.ID = D.ID_JOGO AND EXTRACT(YEAR FROM J.DATA_JOGO) = %(year)s
-        RIGHT JOIN
-            PossiveisResultados P ON P.RESULTADO = D.RESULTADO
+        ) AS P
+        LEFT JOIN (
+            SELECT
+                D.RESULTADO,
+                E.ID
+            FROM
+                DISPUTA D
+            JOIN
+                EQUIPE E ON D.ID_EQUIPE = E.ID
+            JOIN
+                JOGO J ON J.ID = D.ID_JOGO
+            WHERE
+                E.ID = %(id)s
+                AND EXTRACT(YEAR FROM J.DATA_JOGO) = %(year)s
+        ) AS Subquery
+        ON P.RESULTADO = Subquery.RESULTADO
         GROUP BY
             P.RESULTADO
         ORDER BY
