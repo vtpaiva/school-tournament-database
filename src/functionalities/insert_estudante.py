@@ -25,7 +25,17 @@ def insert_estudante():
     try:
         conn, cursor = conectar_banco()
 
-        new_tuple = Estudante.get_from_input()
+        dic = {
+            'cpf': '12345123455',
+            'nome': 'gyhuer',
+            'idade': '1',
+            'altura': '1',
+            'peso': '33',
+            'sexo': 'F',
+            'deficiencia': 'VISUAL'
+        }
+
+        new_tuple = Estudante.get_from_input(dic)
 
         inserir_estudante(conn=conn, cursor=cursor, student=new_tuple)
 

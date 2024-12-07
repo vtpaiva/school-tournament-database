@@ -42,7 +42,20 @@ def insert_modalidade():
     try:
         conn, cursor = conectar_banco()
 
-        new_tuple = Modalidade.get_from_input()
+        dic = {
+            'sport': 'XADREZ',
+            'sex': 'M',
+            'min_age': '2',
+            'max_age': '4',
+            'height': 'ALTO',
+            'weight': 'LEVE',
+            'disability': 'NENHUMA',
+            'n_start': '11',
+            'n_reserve': '5',
+            'scor_rule': 'V1E0D0'
+        }
+
+        new_tuple = Modalidade.get_from_dict(dicti=dic)
 
         insert_modalidade(new_tuple=new_tuple, cursor=cursor)
         
