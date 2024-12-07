@@ -8,12 +8,12 @@ def inserir_estudante(conn, cursor, student):
         INSERT INTO Estudante (CPF, NOME, ALTURA, PESO, SEXO, IDADE, TIPO_DEFICIENCIA)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
     """, (student.cpf, 
-            student.nome, 
-            student.altura, 
-            student.peso, 
-            student.sexo, 
-            student.idade, 
-            student.deficiencia,))
+          student.nome, 
+          student.altura, 
+          student.peso, 
+          student.sexo, 
+          student.idade, 
+          student.deficiencia,))
 
 def inserir_funcao(cursor, cpf, funcao):
     cursor.execute("""
