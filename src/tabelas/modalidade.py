@@ -1,36 +1,34 @@
 from . import *
 
 
+# Classe que representa uma modalidade esportiva
 @dataclass
 class Modalidade:
-
-    esporte: str
-    sexo: str
-    idade_min: int
+    esporte: str 
+    sexo: str 
+    idade_min: int  
     idade_max: int
-    altura: str
-    peso: str
-    deficiencia: str
-    n_titulares: int
-    n_reservas: int
-    regra_pont: str
+    altura: str 
+    peso: str  
+    deficiencia: str 
+    n_titulares: int  
+    n_reservas: int 
+    regra_pont: str 
 
+    # Método de classe que cria uma instância de Modalidade com base na
+    # entrada do usuário
     @classmethod
     def get_from_input(cls):
-        esporte = input('Digite o esporte da modalidade: ')
-        sexo = input(
-            'Digite o sexoo ao qual a modalidade é destinada (M para masculino, F para feminino): ')
-        idade_min = int(input('Digite a idade mínima da modalidade: '))
-        idade_max = int(input('Digite a idade máxima da modalidade: '))
-        altura = input('Digite a faixa de altura da modalidade: ')
-        peso = input('Digite a faixa de peso da modalidade: ')
-        deficiencia = input(
-            'Digite o tipo de deficiência da modalidade, se nenhuma digite NENHUMA: : ')
-        n_titulares = int(
-            input('Digite o número de jogadores titulares por partida da modalidade: '))
-        n_reservas = int(
-            input('Digite o número de jogadores reservas por partida da modalidade: '))
-        regra_pont = input('Digite a regra de pontuação da modalidade: ')
+        esporte = input('Esporte: ')
+        sexo = input('Sexo (M/F): ')
+        idade_min = int(input('Idade mínima: '))
+        idade_max = int(input('Idade máxima: '))
+        altura = input('Faixa de altura: ')
+        peso = input('Faixa de peso: ')
+        deficiencia = input('Deficiência (ou NENHUMA): ')
+        n_titulares = int(input('Número de titulares: '))
+        n_reservas = int(input('Número de reservas: '))
+        regra_pont = input('Regra de pontuação: ')
 
         return cls(
             esporte,

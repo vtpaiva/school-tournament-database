@@ -4,9 +4,28 @@ from dotenv import load_dotenv
 
 from . import *
 
+
+# Constantes do ambiente
+ALTURA, PESO = 0, 1
+
+
+# Função para conectar ao banco de dados utilizando variáveis de ambiente
 def conectar_banco():
+    """
+    Estabelece a conexão com o banco de dados utilizando variáveis de ambiente.
+
+    As variáveis de conexão são carregadas de um arquivo .env usando o 'dotenv'.
+    A conexão é configurada com 'autocommit = False'.
+
+    Returns:
+        conn (object): Conexão com o banco de dados.
+        cursor (object): Cursor para executar comandos SQL.
+    """
+
     load_dotenv()
 
+    # Define os parâmetros de conexão com o banco a partir das variáveis de
+    # ambiente
     conn_params = {
         'dbname': os.getenv("DBNAME"),
         'user': os.getenv("USERNAME"),
@@ -16,22 +35,25 @@ def conectar_banco():
     }
 
     conn = connect(**conn_params)
-    conn.autocommit = False
+    conn.autocommit = False  # Desativa o autocommit para controle manual de transações
 
     return conn, conn.cursor()
 
 
+# Função que converte valores contínuos (altura ou peso) em categorias
+# discretas
 def continuo_para_discreto(campo, valor=None):
     """
-    Converte valores contínuos em categorias discretas dependendo do campo.
+    Converte valores contínuos (altura ou peso) em categorias discretas.
 
-    Parameters:
-        field (int | str): O campo que determina a categoria.
-                           0 ou 'h' para altura e 1 ou 'w' para peso.
-        value (float | None): O valor a ser convertido. Se for None, retorna 'QUALQUER'.
+    Parâmetros:
+        campo (int | str): Identifica o campo que será categorizado.
+                           0 ou 'h' para altura, 1 ou 'w' para peso.
+        valor (float | None): O valor contínuo a ser categorizado.
+                              Se for None, retorna 'QUALQUER'.
 
-    Returns:
-        str: A categoria correspondente ao valor fornecido.
+    Retorno:
+        str: Categoria discreta correspondente ao valor fornecido.
     """
 
     if valor is None:
@@ -44,7 +66,7 @@ def continuo_para_discreto(campo, valor=None):
         (1.70, 1.80): "MEDIO",
         (1.80, 1.90): "ALTO",
         (1.90, inf): "MUITO ALTO"
-    } if campo == 0 else {
+    } if campo == ALTURA else {
         (0, 50): "MUITO LEVE",
         (50, 60): "LEVE",
         (60, 75): "MEDIO",
@@ -57,32 +79,55 @@ def continuo_para_discreto(campo, valor=None):
         if intervalo[0] <= valor < intervalo[1]:
             return descricao
 
+    # Retorna 'QUALQUER' se o valor não se enquadrar em nenhuma faixa
     return "QUALQUER"
 
 
+# Função para validar se o CPF é válido
 def valida_cpf(cpf):
+    """
+    Verifica se o CPF contém apenas números e se possui exatamente 11 dígitos.
+
+    Parâmetros:
+        cpf (str): CPF fornecido pelo usuário.
+
+    Retorno:
+        bool: True se o CPF for válido, False caso contrário.
+    """
     return cpf.isdigit() and len(cpf) == 11
 
 
-def valida_idade(idade):
-    try:
-        idade = int(idade)
-        return idade > 0
-    except ValueError:
-        return False
-
-
+# Função para validar se a altura está no intervalo permitido (1m a 3m)
 def valida_altura(altura):
+    """
+    Valida se a altura está dentro do intervalo permitido (1.0 a 3.0 metros).
+
+    Parâmetros:
+        altura (str): Altura fornecida pelo usuário.
+
+    Retorno:
+        bool: True se a altura for válida, False caso contrário.
+    """
     try:
         altura = float(altura)
-        return 1.0 <= altura <= 3.0
+        return 1.0 <= altura <= 3.0 
     except ValueError:
         return False
 
 
+# Função para validar se o peso está no intervalo permitido (30kg a 200kg)
 def valida_peso(peso):
+    """
+    Valida se o peso está dentro do intervalo permitido (30kg a 200kg).
+
+    Parâmetros:
+        peso (str): Peso fornecido pelo usuário.
+
+    Retorno:
+        bool: True se o peso for válido, False caso contrário.
+    """
     try:
         peso = float(peso)
-        return 30 <= peso <= 200
+        return 30 <= peso <= 200  
     except ValueError:
-        return False
+        return False  

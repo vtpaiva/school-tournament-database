@@ -4,11 +4,12 @@ from .funcionalidades.inserir_modalidade import inserir_modalidade
 
 if __name__ == "__main__":
     while True:
+        # Exibe o menu principal com as opções disponíveis
         print("\n--- Menu Principal ---")
-        print("1. Cadastrar Estudante")
-        print("2. Cadastrar Modalidade")
-        print("3. Consultar jogos")
-        print("4. Sair")
+        print("1. Cadastrar Estudante") 
+        print("2. Cadastrar Modalidade")  
+        print("3. Consultar jogos")  
+        print("4. Sair") 
 
         opcao = input("Escolha uma opção (1/2/3/4): ")
         print('')
