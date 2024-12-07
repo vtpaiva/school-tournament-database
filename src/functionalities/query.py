@@ -1,6 +1,6 @@
-from common.utils import conectar_banco
+from . import *
 
-def query_modalidade(cursor):
+def query(cursor):
     team_id = input("Team? ")
     if int(team_id) < 1:
         raise ValueError("ID deve ser maior que um")
@@ -40,20 +40,24 @@ def query_modalidade(cursor):
             year,
         ))
 
-if __name__ == '__main__':
+def query_jogos():
     try:
         conn, cursor = conectar_banco()
 
-        query_modalidade(cursor=cursor)
+        query(cursor=cursor)
         
         resultados = cursor.fetchall()
+
+        cursor.close()
+        conn.commit()
 
         for row in resultados:
             print(row)
 
     except Exception as error:
+        conn.rollback()
+
         print('Query error: ', error)
 
     finally:
-        cursor.close()
         conn.close()

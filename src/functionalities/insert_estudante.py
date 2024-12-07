@@ -1,6 +1,5 @@
-from psycopg import connect
-from tables.estudante import Estudante
-from common.utils import conectar_banco
+from . import *
+from ..tables.estudante import Estudante
 
 def inserir_estudante(conn, cursor, student):
     inserir_funcao(cursor, student.cpf, 'E')
@@ -22,23 +21,15 @@ def inserir_funcao(cursor, cpf, funcao):
         VALUES (%s, %s)
     """, (cpf, funcao,))
 
-if __name__ == "__main__":
+def insert_estudante():
     try:
         conn, cursor = conectar_banco()
 
-        dic = {
-            'cpf': '12345123455',
-            'nome': 'gyhuer',
-            'idade': '1',
-            'altura': '1',
-            'peso': '33',
-            'sexo': 'F',
-            'deficiencia': 'VISUAL'
-        }
+        new_tuple = Estudante.get_from_input()
 
-        new_tuple = Estudante.get_from_input(dic)
+        inserir_estudante(conn=conn, cursor=cursor, student=new_tuple)
 
-        inserir_estudante(conn, cursor, new_tuple)
+        cursor.close()
         conn.commit()
 
         print(f"Estudante {new_tuple.nome} cadastrado com sucesso!")
@@ -48,5 +39,4 @@ if __name__ == "__main__":
         print(f"Erro ao inserir estudante: {e}")
 
     finally:
-        cursor.close()
         conn.close()

@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-from common.utils import continuos_to_discrete
+from . import *
 
 @dataclass
 class Modalidade:

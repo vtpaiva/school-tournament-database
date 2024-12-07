@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from common.utils import *
+from . import *
+from ..common.utils import *
 
 @dataclass
 class Estudante:

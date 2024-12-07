@@ -1,19 +1,17 @@
+import os
 from . import *
 from numpy import inf
+from dotenv import load_dotenv
 
-def conectar_banco(
-                    dbname='competicao',
-                    user='postgres',
-                    host='localhost',
-                    password='password',
-                    port=5432
-                ):
+def conectar_banco():
+    load_dotenv()
+    
     conn_params = {
-        'dbname': dbname,
-        'user': user,  
-        'host': host,     
-        'password': password,
-        'port': port            
+        'dbname': os.getenv("DBNAME"),
+        'user': os.getenv("USERNAME"),
+        'host': os.getenv("HOST"),
+        'password': os.getenv("PASSWORD"),
+        'port': os.getenv("PORT")          
     }
 
     conn = connect(**conn_params)
