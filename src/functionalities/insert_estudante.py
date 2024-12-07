@@ -39,7 +39,7 @@ def insert_estudante():
         if not valida_cpf(dic['cpf']):
             raise ValueError("CPF inválido. Deve ter 11 dígitos numéricos.")
 
-        new_tuple = Estudante.get_from_input(dic)
+        new_tuple = Estudante.get_from_dict(dic)
 
         inserir_estudante(conn=conn, cursor=cursor, student=new_tuple)
 
