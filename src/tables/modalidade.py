@@ -22,16 +22,16 @@ class Modalidade:
         
     @classmethod
     def get_from_input(cls):
-        sport = input('Sport? ')
-        sex = input('Sex? ')
-        min_age = int(input('Minimum age? '))
-        max_age = int(input('Maximum age? '))
-        height = input('Height? ')
-        weight = input('Weight? ')
-        disability_type = input('Disability type? ')
-        n_start = int(input('Stating team players? '))
-        n_reserve = int(input('Reserve team players? '))
-        scor_rule = input('Scoring rule? ')
+        sport = input('Digite o esporte da modalidade: ')
+        sex = input('Digite o sexo ao qual a modalidade é destinada (M para masculino, F para feminino): ')
+        min_age = int(input('Digite a idade mínima da modalidade: '))
+        max_age = int(input('Digite a idade máxima da modalidade: '))
+        height = input('Digite a faixa de altura da modalidade: ')
+        weight = input('Digite a faixa de peso da modalidade: ')
+        disability_type = input('Digite o tipo de deficiência da modalidade, se nenhuma digite NENHUMA: : ')
+        n_start = int(input('Digite o número de jogadores titulares por partida da modalidade: '))
+        n_reserve = int(input('Digite o número de jogadores reservas por partida da modalidade: '))
+        scor_rule = input('Digite a regra de pontuação da modalidade: ')
 
         return cls(
                     sport, 

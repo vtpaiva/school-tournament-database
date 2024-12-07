@@ -48,6 +48,8 @@ def insert_modalidade():
         
         conn.commit()
 
+        print(f"Modalidade de {new_tuple.sport} cadastrada com sucesso!")
+
     except Exception as error:
         print('Insertion error:', error)
 
