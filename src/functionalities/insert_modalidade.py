@@ -9,7 +9,7 @@ def insert_modalidade_generico(cursor, new_tuple, id):
         SQL("INSERT INTO {} (ID) VALUES (%(id)s)").format(Identifier(table_name)),
         {'id': str(id[0])})
     
-def insert_modalidade(new_tuple, cursor):
+def insert_tupla(new_tuple, cursor):
     cursor.execute("""
         INSERT INTO Modalidade 
             (ESPORTE, SEXO, IDADE_MINIMA, IDADE_MAXIMA, ALTURA, 
@@ -44,7 +44,7 @@ def insert_modalidade():
 
         new_tuple = Modalidade.get_from_input()
 
-        insert_modalidade(new_tuple=new_tuple, cursor=cursor)
+        insert_tupla(new_tuple=new_tuple, cursor=cursor)
         
         conn.commit()
 
