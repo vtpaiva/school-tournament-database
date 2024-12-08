@@ -20,16 +20,17 @@ class Modalidade:
     # entrada do usuário
     @classmethod
     def get_from_input(cls) -> object:
-        esporte = input('Esporte: ')
-        sexo = input('Sexo (M/F): ')
-        idade_min = int(input('Idade mínima: '))
-        idade_max = int(input('Idade máxima: '))
-        altura = input('Faixa de altura: ')
-        peso = input('Faixa de peso: ')
-        deficiencia = input('Deficiência (ou NENHUMA): ')
-        n_titulares = int(input('Número de titulares: '))
-        n_reservas = int(input('Número de reservas: '))
-        regra_pont = input('Regra de pontuação: ')
+        esporte = input('Digite o esporte da modalidade: ')
+        sexo = input(
+            "Digite o sexo da modalidade (M para masculino, F para feminino): ").upper()
+        idade_min = int(input('Digite a idade mínima: '))
+        idade_max = int(input('Digite a idade máxima: '))
+        altura = input('Digite a faixa de altura: ')
+        peso = input('Digite a faixa de peso: ')
+        deficiencia = input('Digite a deficiência da modalidade, se nenhuma digite NENHUMA: ')
+        n_titulares = int(input('Digite o número de titulares: '))
+        n_reservas = int(input('Digite o número de reservas: '))
+        regra_pont = input('Digite a regra de pontuação: ')
 
         return cls(
             esporte,

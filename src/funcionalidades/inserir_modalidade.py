@@ -87,6 +87,7 @@ def inserir_modalidade() -> None:
 
         inserir_tupla(modalidade=nova_tupla, cursor=cursor)
 
+        cursor.close()
         conn.commit()
 
         print(f"\nModalidade de {nova_tupla.esporte} cadastrada com sucesso!")
@@ -96,5 +97,4 @@ def inserir_modalidade() -> None:
         print(f"\nErro ao inserir modalidade: {e}")
 
     finally:
-        cursor.close()
         conn.close()
