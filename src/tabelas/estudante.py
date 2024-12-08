@@ -36,10 +36,10 @@ class Estudante:
                 "Valor de peso inválido. (O valor deve estar entre 20 e 200 kilos)")
 
         sexo = input(
-            "Digite o sexo do estudante (M para masculino, F para feminino): ").upper()
+            "Digite o sexo do estudante (M para masculino, F para feminino): ")
 
         deficiencia = input(
-            "Digite a deficiência do estudante, se nenhuma digite NENHUMA: ")
+            "Digite a deficiência do estudante: (VISUAL, MOTORA, INTELECTUAL, NENHUMA) ")
 
         classificacao_altura = continuo_para_discreto(
             campo=ALTURA, valor=float(altura))

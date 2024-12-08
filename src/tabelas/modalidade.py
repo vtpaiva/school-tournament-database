@@ -22,15 +22,19 @@ class Modalidade:
     def get_from_input(cls) -> object:
         esporte = input('Digite o esporte da modalidade: ')
         sexo = input(
-            "Digite o sexo da modalidade (M para masculino, F para feminino): ").upper()
+            "Digite o sexo da modalidade (M para masculino, F para feminino): ")
         idade_min = int(input('Digite a idade mínima: '))
         idade_max = int(input('Digite a idade máxima: '))
-        altura = input('Digite a faixa de altura: ')
-        peso = input('Digite a faixa de peso: ')
-        deficiencia = input('Digite a deficiência da modalidade, se nenhuma digite NENHUMA: ')
+
+        if idade_min >= idade_max:
+            raise ValueError("A idade mínima deve ser menor que a idade máxima.")
+
+        altura = input('Digite a faixa de altura: (MUITO BAIXO, BAIXO, MEDIO-BAIXO, MEDIO, ALTO, MUITO ALTO, QUALQUER) ')
+        peso = input('Digite a faixa de peso: (MUITO LEVE, LEVE, MEDIO, PESADO, MUITO PESADO, EXTREMAMENTE PESADO, QUALQUER) ')
+        deficiencia = input('Digite a deficiência da modalidade: (VISUAL, MOTORA, INTELECTUAL, NENHUMA) ')
         n_titulares = int(input('Digite o número de titulares: '))
         n_reservas = int(input('Digite o número de reservas: '))
-        regra_pont = input('Digite a regra de pontuação: ')
+        regra_pont = input('Digite a regra de pontuação: (V%dE%dD%d) ')
 
         return cls(
             esporte,
