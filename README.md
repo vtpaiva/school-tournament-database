@@ -34,6 +34,9 @@ This project demonstrates how the combination of ***PostgreSQL*** and ***Psycopg
 
 ## References
 
+
+🐍 <a href="https://docs.python.org/3/">Python Documentation</a>
+
 🖥️ <a href="https://www.psycopg.org/psycopg3/docs/index.html">Psycopg3 Documentation</a>
 
 🛢️ <a href="https://www.psycopg.org/psycopg3/docs/index.htmlhttps://www.postgresql.org/docs/17/index.html">PostgresSQL Documentation</a>
