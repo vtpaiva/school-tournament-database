@@ -12,7 +12,15 @@ The project ranges from the conceptual modeling phase with **Entity-Relation** a
 
 ## Entity-Relationship Diagram
 
+Actors and relationships were mapped according to the ***entity-relationship diagram***.
+
 ![Logo](https://i.imgur.com/oz4HHj0.png)
+
+## Relational Model
+
+The tables were defined according to the ***relational model***.
+
+![Relational diagram](https://i.imgur.com/fBfJpkX.jpeg)
 
 ## How to run
 
